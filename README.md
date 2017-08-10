@@ -141,3 +141,30 @@ See example 4 & 5.
 ## Contributing
 
 I am very appreciate for your ideas, proposals and found bugs which you can leave in github issues. Thanks in advance!
+
+## For this FORK -- Charles Ranaboldo 10/8/17
+I have added load on demand from a data service. Data should be {
+        "text": "",
+        "value": "",
+        "checkable": bool,
+        "collapsed": bool,
+        "disabled": bool,
+        "hasChildren": bool,
+        "children": []
+}
+treeview-item has been altered accordingly
+
+TreeviewConfig {
+    hasAllCheckBox: bool;   
+    hasFilter: bool;
+    hasCollapseExpand: bool;
+    loadAll: bool;  //used by server to load all tree branches(true) or load on expand (false)
+    singleSelect: bool; // only one node can be selected at once
+    singleExpand: bool; // only one branch open at each point
+    maxHeight: num;
+    treeToLoad: "";  //key used by data service to select root of tree from database
+
+    get hasDivider(): boolean {
+        return this.hasFilter || this.hasAllCheckBox || this.hasCollapseExpand;
+    }
+}

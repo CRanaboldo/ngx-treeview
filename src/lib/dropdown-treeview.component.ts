@@ -17,6 +17,7 @@ export class DropdownTreeviewComponent {
     @Input() itemTemplate: TemplateRef<TreeviewItemTemplateContext>;
     @Input() items: TreeviewItem[];
     @Input() config: TreeviewConfig;
+    @Input() selectedItems: string;
     @Output() selectedChange = new EventEmitter<any[]>(true);
     @ViewChild(TreeviewComponent) treeviewComponent: TreeviewComponent;
     @ViewChild(DropdownDirective) dropdownDirective: DropdownDirective;

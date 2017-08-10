@@ -3,31 +3,27 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { TreeviewModule } from '../lib';
 import { AppComponent } from './app.component';
-import { BookComponent } from './book/book.component';
-import { CityComponent } from './city/city.component';
-import { RoomComponent } from './room/room.component';
-import { ProductComponent } from './product/product.component';
-import { DropdownTreeviewSelectModule } from './dropdown-treeview-select';
+import { TestComponent } from './test/test.component';
 import { I18n } from './i18n';
 import { DisabledOnSelectorDirective } from './disabled-on-selector.directive';
+
+import { HttpModule  } from '@angular/http';
 
 @NgModule({
     imports: [
         BrowserModule,
+        HttpModule,
         FormsModule,
         TreeviewModule.forRoot(),
-        DropdownTreeviewSelectModule
     ],
     declarations: [
-        BookComponent,
-        CityComponent,
-        RoomComponent,
-        ProductComponent,
+        
+        TestComponent,
         AppComponent,
         DisabledOnSelectorDirective
     ],
     providers: [
-        I18n
+        I18n,
     ],
     bootstrap: [AppComponent]
 })

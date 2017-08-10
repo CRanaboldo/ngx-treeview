@@ -7,6 +7,7 @@ import { TreeviewEventParser } from './treeview-event-parser';
 import { TreeviewHeaderTemplateContext } from './treeview-header-template-context';
 import { TreeviewItemTemplateContext } from './treeview-item-template-context';
 import { TreeviewParserComponent } from './treeview-parser-component';
+import { treeviewdataService} from "./treeview-data.service";
 
 class FilterTreeviewItem extends TreeviewItem {
     private readonly refItem: TreeviewItem;
@@ -51,20 +52,24 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent {
     @Input() itemTemplate: TemplateRef<TreeviewItemTemplateContext>;
     @Input() items: TreeviewItem[];
     @Input() config: TreeviewConfig;
+    @Input() selectedItems: string;
+
     @Output() selectedChange = new EventEmitter<any[]>();
     headerTemplateContext: TreeviewHeaderTemplateContext;
     allItem: TreeviewItem;
     filterText = '';
     filterItems: TreeviewItem[];
     checkedItems: TreeviewItem[];
-
+    checkedItm: TreeviewItem;
+    
     constructor(
         public i18n: TreeviewI18n,
         private defaultConfig: TreeviewConfig,
-        private eventParser: TreeviewEventParser
+        private eventParser: TreeviewEventParser,
+        private tvdataSvc: treeviewdataService
     ) {
         this.config = this.defaultConfig;
-        this.allItem = new TreeviewItem({ text: 'All', value: undefined });
+        this.allItem = new TreeviewItem({ text: 'All', value: undefined, checked: false });
         this.createHeaderTemplateContext();
     }
 
@@ -108,8 +113,27 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent {
 
         this.raiseSelectedChange();
     }
+    
+    onCheckedItemChng(event){
+        this.checkedItm = event
+        this.raiseSelectedChange();
+    }
 
+    async onExpandedItem(event) {
+        let expandedItem: TreeviewItem = event
+        if (this.config.singleExpand) {
+        for (let i=0;  i< this.filterItems.length; i++)
+            {
+                if (this.filterItems[i]!==expandedItem) this.filterItems[i].collapsed= true;
+            }
+        }
+        if (expandedItem.hasChildren && _.isNil(expandedItem.children)) {
+            expandedItem.children = await this.tvdataSvc.getTree(expandedItem.value,false,this.selectedItems)
+             this.raiseSelectedChange();
+         }
+    }
     onItemCheckedChange(item: TreeviewItem, checked: boolean) {
+       
         if (this.allItem.checked !== checked) {
             let allItemChecked = true;
             for (let i = 0; i < this.filterItems.length; i++) {
@@ -123,21 +147,32 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent {
                 this.allItem.checked = allItemChecked;
             }
         }
-
         if (item instanceof FilterTreeviewItem) {
             item.updateRefChecked();
         }
 
-        this.raiseSelectedChange();
+        
     }
 
     raiseSelectedChange() {
         this.checkedItems = this.getCheckedItems();
+        if (this.checkedItm!==undefined){
+            if (this.config.singleSelect && this.checkedItm.checked && this.checkedItems.length> 1) {
+                for (let i = this.checkedItems.length-1; i>-1; i--) {
+                    if (this.checkedItems[i]!==this.checkedItm) {
+                        this.checkedItems[i].checked = false
+                        this.checkedItems.splice(i,1)
+                    }
+                }
+            } 
+            
+        }
         const values = this.eventParser.getSelectedChange(this);
         this.selectedChange.emit(values);
     }
 
     private createHeaderTemplateContext() {
+        if (this.config.singleSelect) this.config.hasAllCheckBox=false;
         this.headerTemplateContext = {
             config: this.config,
             item: this.allItem,
@@ -202,7 +237,7 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent {
     }
 
     private updateCheckedAll() {
-        let hasItemUnchecked = false;
+        let hasItemUnchecked = (this.filterItems.length==0)? true: false;
         for (let i = 0; i < this.filterItems.length; i++) {
             if (!this.filterItems[i].checked) {
                 hasItemUnchecked = true;

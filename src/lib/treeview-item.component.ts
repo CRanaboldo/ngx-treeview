@@ -2,7 +2,8 @@
 import * as _ from 'lodash';
 import { TreeviewItem } from './treeview-item';
 import { TreeviewItemTemplateContext } from './treeview-item-template-context';
-
+import { TreeviewConfig } from './treeview-config';
+import { treeviewdataService} from "./treeview-data.service";
 @Component({
     selector: 'ngx-treeview-item',
     templateUrl: './treeview-item.component.html',
@@ -11,21 +12,42 @@ import { TreeviewItemTemplateContext } from './treeview-item-template-context';
 export class TreeviewItemComponent {
     @Input() template: TemplateRef<TreeviewItemTemplateContext>;
     @Input() item: TreeviewItem;
+    @Input() config: TreeviewConfig;
     @Output() checkedChange = new EventEmitter<boolean>();
-
+    @Output() checkedItem = new EventEmitter<TreeviewItem>();
+    @Output() expandedItem = new EventEmitter<TreeviewItem>();
     onCollapseExpand = () => {
         this.item.collapsed = !this.item.collapsed;
+        if (!this.item.collapsed) this.expandedItem.emit(this.item);
     }
+
+    
 
     onCheckedChange = () => {
+        
         const checked = this.item.checked;
-        if (!_.isNil(this.item.children)) {
+        if (!_.isNil(this.item.children) && !this.config.singleSelect) {
             this.item.children.forEach(child => child.setCheckedRecursive(checked));
-        }
+        
+                } 
+            if (this.config.singleSelect && this.item.checked && !_.isNil(this.item.children)) this.item.checked=false;
+            this.checkedChange.emit(this.item.checked);
+            this.checkedItem.emit(this.item);
+            
 
-        this.checkedChange.emit(checked);
+    }
+// these are for recurrsion to higher levels in deep trees
+    onCheckedItem(Item:TreeviewItem){
+       
+        this.checkedItem.emit(Item)
+        
     }
 
+    onExpandedItem(Item:TreeviewItem){
+       
+        this.expandedItem.emit(Item)
+        
+    }
     onChildCheckedChange(child: TreeviewItem, checked: boolean) {
         if (this.item.checked !== checked) {
             let itemChecked = true;

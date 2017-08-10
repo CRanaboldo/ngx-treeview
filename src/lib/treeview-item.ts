@@ -7,15 +7,19 @@ export interface TreeItem {
     checked?: boolean;
     collapsed?: boolean;
     children?: TreeItem[];
+    hasChildren?: boolean;
+    checkable?: boolean;
 }
+
 
 export class TreeviewItem {
     private internalDisabled = false;
-    private internalChecked = true;
+    private internalChecked = false;
     private internalCollapsed = false;
     private internalChildren: TreeviewItem[];
     text: string;
     value: any;
+    hasChildren: boolean;
 
     constructor(item: TreeItem, autoCorrectChecked = false) {
         if (_.isNil(item)) {
@@ -35,6 +39,9 @@ export class TreeviewItem {
         }
         if (_.isBoolean(item.disabled)) {
             this.disabled = item.disabled;
+        }
+         if (_.isBoolean(item.hasChildren)) {
+            this.hasChildren = item.hasChildren;
         }
         if (this.disabled === true && this.checked === false) {
             throw new Error('A disabled item must be checked');
