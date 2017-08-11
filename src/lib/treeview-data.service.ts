@@ -6,14 +6,13 @@ import 'rxjs/add/operator/map'
 
 @Injectable()
 export class treeviewdataService  {
-    private BASE_URL: string = 'http://localhost:56783/api/DDSLists/Tree';
+   
     
-    constructor(private http: Http) {
-        
-    }
-    public async getTree(tree: string, loadAll: boolean, selectedItems: string) {
+    constructor(private http: Http) {}
+
+    public async getTree(BASE_URL: string, tree: string, loadAll: boolean, selectedItems: string) {
         let items: TreeviewItem[]= [];
-        let ret = await this.fetch(tree,loadAll)
+        let ret = await this.fetch(BASE_URL, tree,loadAll)
            ret.json().forEach(element => {
             items.push(new TreeviewItem(element))
         });
@@ -22,9 +21,9 @@ export class treeviewdataService  {
         this.applyValues(items,selItems);
         return items;   
     }
-    fetch(tree: string, loadAll: boolean){
+    fetch(BASE_URL: string, tree: string, loadAll: boolean){
         const queryStr = `Pid=`+tree+'&All='+loadAll.toString()
-        return  this.http.get(`${this.BASE_URL}/?${queryStr}`).toPromise(); // Promise used as data has to be resent for component to build 
+        return  this.http.get(`${BASE_URL}/?${queryStr}`).toPromise(); // Promise used as data has to be resent for component to build 
     }
     
     applyValues(k:TreeviewItem[], j:string[]): void{

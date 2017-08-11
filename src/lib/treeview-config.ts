@@ -10,6 +10,7 @@ export class TreeviewConfig {
     singleExpand = true;
     maxHeight = 500;
     treeToLoad = "";
+    url = "";
 
     get hasDivider(): boolean {
         return this.hasFilter || this.hasAllCheckBox || this.hasCollapseExpand;
@@ -23,7 +24,8 @@ export class TreeviewConfig {
         singleSelect?:boolean,
         singleExpand?: boolean,
         maxHeight?: number,
-        treeToLoad?: string
+        treeToLoad?: string,
+        url: string
     }): TreeviewConfig {
         const config = new TreeviewConfig();
         Object.assign(config, fields);

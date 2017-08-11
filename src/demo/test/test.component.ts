@@ -18,7 +18,7 @@ export class TestComponent implements OnInit {
 
     async ngOnInit() {
       
-        this.items = await this.service.getTree(this.config.treeToLoad, this.config.loadAll, this.selectedItems )
+        this.items = await this.service.getTree(this.config.url,this.config.treeToLoad, this.config.loadAll, this.selectedItems )
        
     };
 

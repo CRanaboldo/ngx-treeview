@@ -128,7 +128,7 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent {
             }
         }
         if (expandedItem.hasChildren && _.isNil(expandedItem.children)) {
-            expandedItem.children = await this.tvdataSvc.getTree(expandedItem.value,false,this.selectedItems)
+            expandedItem.children = await this.tvdataSvc.getTree(this.config.url,expandedItem.value,false,this.selectedItems)
              this.raiseSelectedChange();
          }
     }
