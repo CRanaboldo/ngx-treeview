@@ -10,7 +10,7 @@ import { TreeviewPipe } from './treeview.pipe';
 import { TreeviewI18n, TreeviewI18nDefault } from './treeview-i18n';
 import { TreeviewConfig } from './treeview-config';
 import { TreeviewEventParser, DefaultTreeviewEventParser } from './treeview-event-parser';
-import { TreeviewData  } from "./treeview-data.service"
+import { TreeviewData  } from "./treeview-data"
 @NgModule({
     imports: [
         FormsModule,
