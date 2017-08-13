@@ -5,7 +5,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map'
 
 @Injectable()
-export class treeviewdataService  {
+export class TreeviewData  {
    
     
     constructor(private http: Http) {}

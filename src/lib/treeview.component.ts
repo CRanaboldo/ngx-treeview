@@ -7,7 +7,7 @@ import { TreeviewEventParser } from './treeview-event-parser';
 import { TreeviewHeaderTemplateContext } from './treeview-header-template-context';
 import { TreeviewItemTemplateContext } from './treeview-item-template-context';
 import { TreeviewParserComponent } from './treeview-parser-component';
-import { treeviewdataService} from "./treeview-data.service";
+import { TreeviewData} from "./treeview-data.service";
 
 class FilterTreeviewItem extends TreeviewItem {
     private readonly refItem: TreeviewItem;
@@ -66,7 +66,7 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent {
         public i18n: TreeviewI18n,
         private defaultConfig: TreeviewConfig,
         private eventParser: TreeviewEventParser,
-        private tvdataSvc: treeviewdataService
+        private tvdataSvc: TreeviewData
     ) {
         this.config = this.defaultConfig;
         this.allItem = new TreeviewItem({ text: 'All', value: undefined, checked: false });

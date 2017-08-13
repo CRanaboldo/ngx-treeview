@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TreeviewItem, TreeviewConfig } from '../../lib';
-import { treeviewdataService} from "../../lib/treeview-data.service";
+import { TreeviewData} from "../../lib/treeview-data.service";
 @Component({
     selector: 'ngx-test',
     templateUrl: './test.component.html',
@@ -14,7 +14,7 @@ export class TestComponent implements OnInit {
     @Input() selectedItems: string;
     @Input() config: TreeviewConfig;
    
-    constructor(private service: treeviewdataService) {}
+    constructor(private service: TreeviewData) {}
 
     async ngOnInit() {
       

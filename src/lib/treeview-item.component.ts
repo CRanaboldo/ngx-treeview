@@ -3,7 +3,6 @@ import * as _ from 'lodash';
 import { TreeviewItem } from './treeview-item';
 import { TreeviewItemTemplateContext } from './treeview-item-template-context';
 import { TreeviewConfig } from './treeview-config';
-import { treeviewdataService} from "./treeview-data.service";
 @Component({
     selector: 'ngx-treeview-item',
     templateUrl: './treeview-item.component.html',
