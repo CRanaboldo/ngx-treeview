@@ -7,7 +7,7 @@ import { TreeviewEventParser } from './treeview-event-parser';
 import { TreeviewHeaderTemplateContext } from './treeview-header-template-context';
 import { TreeviewItemTemplateContext } from './treeview-item-template-context';
 import { TreeviewParserComponent } from './treeview-parser-component';
-import { TreeviewData} from "./treeview-data.service";
+import { TreeviewData} from "./treeview-data";
 
 class FilterTreeviewItem extends TreeviewItem {
     private readonly refItem: TreeviewItem;

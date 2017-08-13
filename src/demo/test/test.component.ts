@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TreeviewItem, TreeviewConfig } from '../../lib';
-import { TreeviewData} from "../../lib/treeview-data.service";
+import { TreeviewData} from "../../lib/treeview-data";
 @Component({
     selector: 'ngx-test',
     templateUrl: './test.component.html',
