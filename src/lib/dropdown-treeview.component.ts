@@ -1,5 +1,4 @@
 ﻿import { Component, EventEmitter, Input, Output, HostListener, ViewChild, TemplateRef } from '@angular/core';
-import { TreeviewI18n } from './treeview-i18n';
 import { TreeviewItem } from './treeview-item';
 import { TreeviewConfig } from './treeview-config';
 import { TreeviewComponent } from './treeview.component';
@@ -17,23 +16,41 @@ export class DropdownTreeviewComponent {
     @Input() itemTemplate: TemplateRef<TreeviewItemTemplateContext>;
     @Input() items: TreeviewItem[];
     @Input() config: TreeviewConfig;
-    @Input() selectedItems: string;
+    @Input() initialSelItems: string;
+    @Input() initialSelText: string;
+
     @Output() selectedChange = new EventEmitter<any[]>(true);
     @ViewChild(TreeviewComponent) treeviewComponent: TreeviewComponent;
     @ViewChild(DropdownDirective) dropdownDirective: DropdownDirective;
+    public selText: string = '';
 
     constructor(
-        public i18n: TreeviewI18n,
         private defaultConfig: TreeviewConfig
     ) {
         this.config = this.defaultConfig;
     }
 
-    getText(): string {
-        return this.i18n.getText(this.treeviewComponent.checkedItems, this.treeviewComponent.allItem.checked);
-    }
+    
 
     onSelectedChange(values: any[]) {
+       
+        if (this.treeviewComponent.allItem.checked) {
+            this.selText =  'All' 
+        } else {
+            
+            switch (this.treeviewComponent.checkedItems.length) {
+                case 0:
+                    this.selText =  'Select'
+                    break;
+                case 1:
+                    this.selText = this.treeviewComponent.checkedItems[0].text;
+                    break;
+                default:
+                    this.selText = `${this.treeviewComponent.checkedItems.length} options selected`
+                }
+            }
+        
+        
         this.selectedChange.emit(values);
     }
 }

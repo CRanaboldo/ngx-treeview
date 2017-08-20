@@ -1,0 +1,36 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+         {
+            "name": "Launch Chrome 6200",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:6200",
+            "sourceMaps": true,
+            "webRoot": "${workspaceRoot}",
+            "userDataDir": "${workspaceRoot}/.vscode/chrome",
+            // the next 2 options is to create a new chrome instance without warnings
+            "runtimeArgs": [
+                "--disable-session-crashed-bubble"
+                // ,
+                // "--disable-infobars",
+                // "--disable-application-cache",
+                // "--media-cache-size=1",
+                // "--disk-cache-size=1"
+            ],
+            "sourceMapPathOverrides": {              
+                "webpack:///./~/*": "${workspaceRoot}/node_modules/*",
+                "webpack:///./src/*": "${workspaceRoot}/src/*"
+            }
+            // Uncomment this to get diagnostic logs in the console
+            // "diagnosticLogging": true           
+            }  
+    ],
+             "restart": true,
+      "port": 6200,
+      "protocol": "legacy",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "outFiles": ["${workspaceRoot}/build/**/*.js"],
+      "sourceMaps": true
+}

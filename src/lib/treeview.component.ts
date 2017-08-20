@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges, OnChanges, TemplateRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, OnChanges, TemplateRef, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { TreeviewI18n } from './treeview-i18n';
 import { TreeviewItem } from './treeview-item';
@@ -47,19 +47,20 @@ class FilterTreeviewItem extends TreeviewItem {
     templateUrl: './treeview.component.html',
     styleUrls: ['./treeview.component.scss']
 })
-export class TreeviewComponent implements OnChanges, TreeviewParserComponent {
+export class TreeviewComponent implements OnChanges, TreeviewParserComponent, OnInit {
     @Input() headerTemplate: TemplateRef<TreeviewHeaderTemplateContext>;
     @Input() itemTemplate: TemplateRef<TreeviewItemTemplateContext>;
     @Input() items: TreeviewItem[];
     @Input() config: TreeviewConfig;
-    @Input() selectedItems: string;
+    @Input() initialSelItems: string= '';
+    @Input() initialSelText: string= '';
 
     @Output() selectedChange = new EventEmitter<any[]>();
     headerTemplateContext: TreeviewHeaderTemplateContext;
     allItem: TreeviewItem;
     filterText = '';
     filterItems: TreeviewItem[];
-    checkedItems: TreeviewItem[];
+    checkedItems: TreeviewItem[] = [];
     checkedItm: TreeviewItem;
     
     constructor(
@@ -71,6 +72,17 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent {
         this.config = this.defaultConfig;
         this.allItem = new TreeviewItem({ text: 'All', value: undefined, checked: false });
         this.createHeaderTemplateContext();
+    }
+
+    ngOnInit(){
+        if (this.initialSelItems!==''){
+            let itm: string[]= this.initialSelItems.split(',');
+            let iTx: string[]= this.initialSelText.split(',');
+            for(let i = 0; i< itm.length; i++){
+                this.checkedItm = new TreeviewItem({ text: iTx[i], value: itm[i], checked: true })
+                this.checkedItems.push(this.checkedItm)
+            }
+        }
     }
 
     get hasFilterItems(): boolean {
@@ -128,7 +140,7 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent {
             }
         }
         if (expandedItem.hasChildren && _.isNil(expandedItem.children)) {
-            expandedItem.children = await this.tvdataSvc.getTree(this.config.url,expandedItem.value,false,this.selectedItems)
+            expandedItem.children = await this.tvdataSvc.getTree(this.config.url,expandedItem.value,false,this.initialSelItems)
              this.raiseSelectedChange();
          }
     }
@@ -155,20 +167,31 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent {
     }
 
     raiseSelectedChange() {
-        this.checkedItems = this.getCheckedItems();
+        let currentlyChecked: TreeviewItem[];
+        currentlyChecked = this.getCheckedItems();
         if (this.checkedItm!==undefined){
-            if (this.config.singleSelect && this.checkedItm.checked && this.checkedItems.length> 1) {
-                for (let i = this.checkedItems.length-1; i>-1; i--) {
-                    if (this.checkedItems[i]!==this.checkedItm) {
-                        this.checkedItems[i].checked = false
-                        this.checkedItems.splice(i,1)
+            if (this.config.singleSelect && this.checkedItm.checked && currentlyChecked.length> 1) {
+                for (let i = currentlyChecked.length-1; i>-1; i--) {
+                    if (currentlyChecked[i]!==this.checkedItm) {
+                        currentlyChecked[i].checked = false
                     }
                 }
+
             } 
             
+            
+            this.checkedItems =[];
+             if (this.config.singleSelect && this.checkedItm.checked) {
+                 this.checkedItems.push(this.checkedItm)
+             } else{
+                 this.checkedItems = currentlyChecked;
+             }
+            
         }
+
         const values = this.eventParser.getSelectedChange(this);
         this.selectedChange.emit(values);
+       
     }
 
     private createHeaderTemplateContext() {
