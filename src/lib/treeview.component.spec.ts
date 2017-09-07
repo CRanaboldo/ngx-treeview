@@ -292,7 +292,8 @@ describe('TreeviewComponent', () => {
                 hasAllCheckBox: true,
                 hasCollapseExpand: true,
                 hasFilter: true,
-                maxHeight: 400
+                loadAll: true,
+                url: ''
             });
             fakeData.items = [
                 new TreeviewItem({

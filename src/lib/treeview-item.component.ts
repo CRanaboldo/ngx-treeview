@@ -30,6 +30,7 @@ export class TreeviewItemComponent {
         
                 } 
             if (this.config.singleSelect && this.item.checked && !_.isNil(this.item.children)) this.item.checked=false;
+            
             this.checkedChange.emit(this.item.checked);
             this.checkedItem.emit(this.item);
             

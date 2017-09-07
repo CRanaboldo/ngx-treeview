@@ -49,7 +49,7 @@ export class DropdownTreeviewComponent {
                     this.selText = `${this.treeviewComponent.checkedItems.length} options selected`
                 }
             }
-        
+        if (this.treeviewComponent.config.singleSelect  && values.length> 0 ) this.dropdownDirective.close();
         
         this.selectedChange.emit(values);
     }

@@ -129,6 +129,7 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent, On
     onCheckedItemChng(event){
         this.checkedItm = event
         this.raiseSelectedChange();
+       
     }
 
     async onExpandedItem(event) {
@@ -186,6 +187,7 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent, On
              } else{
                  this.checkedItems = currentlyChecked;
              }
+                
             
         }
 

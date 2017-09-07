@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, HttpModule, Response } from '@angular/http';
-import { TreeviewItem} from '../lib';
+import { TreeviewItem} from './treeview-item';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map'
 
