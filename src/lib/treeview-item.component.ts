@@ -1,12 +1,14 @@
-﻿import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+﻿import { Component, EventEmitter, Input, Output, ContentChild, TemplateRef } from '@angular/core';
 import * as _ from 'lodash';
 import { TreeviewItem } from './treeview-item';
+import { DropdownDirective } from './dropdown.directive';
 import { TreeviewItemTemplateContext } from './treeview-item-template-context';
 import { TreeviewConfig } from './treeview-config';
+
 @Component({
     selector: 'ngx-treeview-item',
     templateUrl: './treeview-item.component.html',
-    styleUrls: ['./treeview-item.component.scss']
+    styleUrls: ['./treeview-item.component.scss'],
 })
 export class TreeviewItemComponent {
     @Input() template: TemplateRef<TreeviewItemTemplateContext>;
@@ -15,6 +17,8 @@ export class TreeviewItemComponent {
     @Output() checkedChange = new EventEmitter<boolean>();
     @Output() checkedItem = new EventEmitter<TreeviewItem>();
     @Output() expandedItem = new EventEmitter<TreeviewItem>();
+    @ContentChild(DropdownDirective) dropdownDirective: DropdownDirective;
+
     onCollapseExpand = () => {
         this.item.collapsed = !this.item.collapsed;
         if (!this.item.collapsed) this.expandedItem.emit(this.item);
@@ -33,6 +37,7 @@ export class TreeviewItemComponent {
             
             this.checkedChange.emit(this.item.checked);
             this.checkedItem.emit(this.item);
+            
             
 
     }

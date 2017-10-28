@@ -24,12 +24,14 @@ export class DropdownDirective {
     onKeyupArrowDown() {
         this.open();
     }
+
     @HostListener('document:click', ['$event'])
     onDocumentClick(event: MouseEvent) {
         if (event.button !== 2 && !this.isEventFromToggle(event)) {
             this.close();
         }
     }
+   
 
     open() {
         if (!this.internalOpen) {

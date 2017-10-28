@@ -23,14 +23,13 @@ export class DropdownTreeviewComponent {
     @ViewChild(TreeviewComponent) treeviewComponent: TreeviewComponent;
     @ViewChild(DropdownDirective) dropdownDirective: DropdownDirective;
     public selText: string = '';
+    //private dropdown: DropdownDirective
 
-    constructor(
-        private defaultConfig: TreeviewConfig
-    ) {
+    constructor( private defaultConfig: TreeviewConfig) {
         this.config = this.defaultConfig;
     }
 
-    
+     
 
     onSelectedChange(values: any[]) {
        
@@ -44,12 +43,13 @@ export class DropdownTreeviewComponent {
                     break;
                 case 1:
                     this.selText = this.treeviewComponent.checkedItems[0].text;
+                    if (this.config.singleSelect) this.dropdownDirective.close()
                     break;
                 default:
                     this.selText = `${this.treeviewComponent.checkedItems.length} options selected`
                 }
             }
-        if (this.treeviewComponent.config.singleSelect  && values.length> 0 ) this.dropdownDirective.close();
+      
         
         this.selectedChange.emit(values);
     }

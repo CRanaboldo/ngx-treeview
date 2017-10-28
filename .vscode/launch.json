@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
          {
-            "name": "Launch Chrome 6200",
+            "name": "Launch Chrome 5200",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:6200",
+            "url": "http://localhost:5200",
             "sourceMaps": true,
             "webRoot": "${workspaceRoot}",
             "userDataDir": "${workspaceRoot}/.vscode/chrome",
@@ -27,7 +27,7 @@
             }  
     ],
              "restart": true,
-      "port": 6200,
+      "port": 5200,
       "protocol": "legacy",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
