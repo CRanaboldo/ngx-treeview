@@ -9,6 +9,9 @@ export interface TreeItem {
     children?: TreeItem[];
     hasChildren?: boolean;
     checkable?: boolean;
+    parentName?: string;
+    parent?: TreeviewItem;
+    childOf?: string;
 }
 
 
@@ -20,6 +23,10 @@ export class TreeviewItem {
     text: string;
     value: any;
     hasChildren: boolean;
+    checkable?: boolean;
+    parentName?: string;
+    parent?: TreeviewItem;
+    childOf: string;
 
     constructor(item: TreeItem, autoCorrectChecked = false) {
         if (_.isNil(item)) {
@@ -40,9 +47,26 @@ export class TreeviewItem {
         if (_.isBoolean(item.disabled)) {
             this.disabled = item.disabled;
         }
-         if (_.isBoolean(item.hasChildren)) {
+        if (_.isBoolean(item.hasChildren)) {
             this.hasChildren = item.hasChildren;
         }
+        if (_.isBoolean(item.checkable)) {
+            this.checkable = item.checkable;
+        }
+        if (_.isBoolean(item.checkable)) {
+            this.checkable = item.checkable;
+        }
+        if (_.isString(item.parentName)) {
+            this.parentName = item.parentName;
+        }
+        if (!_.isNull(item.parent)) {
+            this.parent = item.parent;
+        }
+        if (_.isString(item.childOf)) {
+            this.childOf = item.childOf;
+        }
+
+
         if (this.disabled === true && this.checked === false) {
             throw new Error('A disabled item must be checked');
         }
@@ -61,6 +85,7 @@ export class TreeviewItem {
         }
     }
 
+
     get checked(): boolean {
         return this.internalChecked;
     }
@@ -73,12 +98,20 @@ export class TreeviewItem {
         }
     }
 
+    
+
     setCheckedRecursive(value: boolean) {
         if (!this.internalDisabled) {
             this.internalChecked = value;
             if (!_.isNil(this.internalChildren)) {
                 this.internalChildren.forEach(child => child.setCheckedRecursive(value));
             }
+        }
+    }
+
+    setCheckedParent() {
+        if (!this.internalDisabled) {
+            this.childOf = this.getParent(this);
         }
     }
 
@@ -116,6 +149,8 @@ export class TreeviewItem {
         return this.internalChildren;
     }
 
+
+
     set children(value: TreeviewItem[]) {
         if (this.internalChildren !== value) {
             if (!_.isNil(value) && value.length === 0) {
@@ -134,15 +169,15 @@ export class TreeviewItem {
         }
     }
 
+
     getCheckedItems(): TreeviewItem[] {
         let checkedItems: TreeviewItem[] = [];
-        if (_.isNil(this.internalChildren)) {
-            if (this.internalChecked) {
-                checkedItems.push(this);
-            }
-        } else {
+        if (this.internalChecked) checkedItems.push(this);
+
+        if (!(_.isNil(this.internalChildren))) {
             const childCount = this.internalChildren.length;
             for (let i = 0; i < childCount; i++) {
+
                 checkedItems = _.concat(checkedItems, this.internalChildren[i].getCheckedItems());
             }
         }
@@ -171,4 +206,22 @@ export class TreeviewItem {
 
         return checked;
     }
+
+    private getParent(item: TreeItem): string {
+        let v: string = "";
+        if (!_.isNull(item.parent)) {
+            if (item.parent.checkable) {
+                item.parent.checked = true;
+                return item.parent.value;
+            } else {
+                v = this.getParent(item.parent);
+            }
+        }
+        return v;
+
+
+    }
+
+
+
 }

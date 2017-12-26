@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { TreeviewModule } from '../lib';
 import { AppComponent } from './app.component';
 import { TestComponent } from './test/test.component';
+import { RolePermComponent } from './test/RolePerm.component'
 import { I18n } from './i18n';
 import { DisabledOnSelectorDirective } from './disabled-on-selector.directive';
 
@@ -19,6 +20,7 @@ import { HttpModule  } from '@angular/http';
     declarations: [
         
         TestComponent,
+        RolePermComponent,
         AppComponent,
         DisabledOnSelectorDirective
     ],

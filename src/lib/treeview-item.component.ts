@@ -24,48 +24,54 @@ export class TreeviewItemComponent {
         if (!this.item.collapsed) this.expandedItem.emit(this.item);
     }
 
-    
+
 
     onCheckedChange = () => {
-        
+
         const checked = this.item.checked;
-        if (!_.isNil(this.item.children) && !this.config.singleSelect) {
+        if (!_.isNil(this.item.children) && !this.config.singleSelect && this.config.selectBranch) {
             this.item.children.forEach(child => child.setCheckedRecursive(checked));
-        
-                } 
-            if (this.config.singleSelect && this.item.checked && !_.isNil(this.item.children)) this.item.checked=false;
+        } else {
+            if (this.config.selectParents &&checked) this.item.setCheckedParent();
             
-            this.checkedChange.emit(this.item.checked);
-            this.checkedItem.emit(this.item);
-            
-            
-
-    }
-// these are for recurrsion to higher levels in deep trees
-    onCheckedItem(Item:TreeviewItem){
-       
-        this.checkedItem.emit(Item)
-        
-    }
-
-    onExpandedItem(Item:TreeviewItem){
-       
-        this.expandedItem.emit(Item)
-        
-    }
-    onChildCheckedChange(child: TreeviewItem, checked: boolean) {
-        if (this.item.checked !== checked) {
-            let itemChecked = true;
-            for (let i = 0; i < this.item.children.length; i++) {
-                if (!this.item.children[i].checked) {
-                    itemChecked = false;
-                    break;
-                }
-            }
-
-            this.item.checked = itemChecked;
         }
 
-        this.checkedChange.emit(checked);
+        if (this.config.singleSelect && this.item.checked && !_.isNil(this.item.children)) this.item.checked = false;
+
+        this.checkedChange.emit(this.item.checked);
+        this.checkedItem.emit(this.item);
+
+
+
     }
+    // these are for recurrsion to higher levels in deep trees
+    onCheckedItem(Item: TreeviewItem) {
+
+        this.checkedItem.emit(Item)
+
+    }
+
+    onExpandedItem(Item: TreeviewItem) {
+
+        this.expandedItem.emit(Item)
+
+    }
+    onChildCheckedChange(child: TreeviewItem, checked: boolean) {
+        if (!this.config.selectParents) { // prevents unchecking 
+            if (this.item.checked !== checked) {
+                let itemChecked = true;
+                for (let i = 0; i < this.item.children.length; i++) {
+                    if (!this.item.children[i].checked) {
+                        itemChecked = false;
+                        break;
+                    }
+                }
+
+                this.item.checked = itemChecked;
+            }
+
+            this.checkedChange.emit(checked);
+        }
+    }
+    
 }

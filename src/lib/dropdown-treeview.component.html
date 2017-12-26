@@ -1,11 +1,11 @@
 <div class="dropdown" ngxDropdown>
-    <button class="k-textbox" type="button" role="button" ngxDropdownToggle>
+        <button class="btn btn-secondary" type="button" role="button" ngxDropdownToggle>
         {{selText}}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" (click)="$event.stopPropagation()">
         <div class="dropdown-container">
             <ngx-treeview [config]="config" [headerTemplate]="headerTemplate" [initialSelItems]="initialSelItems" [initialSelText]="initialSelText" [items]="items" [itemTemplate]="itemTemplate" 
-                (selectedChange)="onSelectedChange($event)" >
+                (selectedChange)="onSelectedChange($event)"  >
             </ngx-treeview>
         </div>
     </div>

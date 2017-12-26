@@ -6,8 +6,10 @@ export class TreeviewConfig {
     hasFilter = false;
     hasCollapseExpand = false;
     loadAll = true;
-    singleSelect = true;
-    singleExpand = true;
+    singleSelect = true; // only single item can be selcted
+    singleExpand = true; // only one branch open at a time
+    selectBranch = false; // all items selected in branch if true
+    selectParents = false; // select the patent nodes
     maxHeight = 500;
     treeToLoad = "";
     url = "";
@@ -23,6 +25,8 @@ export class TreeviewConfig {
         loadAll?: boolean,
         singleSelect?:boolean,
         singleExpand?: boolean,
+        selectBranch?: boolean,
+        selectParents: boolean,
         maxHeight?: number,
         treeToLoad?: string,
         url: string

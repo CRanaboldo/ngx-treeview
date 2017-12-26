@@ -8,6 +8,8 @@ import { TreeviewHeaderTemplateContext } from './treeview-header-template-contex
 import { TreeviewItemTemplateContext } from './treeview-item-template-context';
 import { TreeviewParserComponent } from './treeview-parser-component';
 import { TreeviewData} from "./treeview-data";
+import { TreeviewHelper } from "./treeview-helper"
+import { TreeItem } from 'ngx-treeview';
 
 class FilterTreeviewItem extends TreeviewItem {
     private readonly refItem: TreeviewItem;
@@ -18,7 +20,9 @@ class FilterTreeviewItem extends TreeviewItem {
             disabled: item.disabled,
             checked: item.checked,
             collapsed: item.collapsed,
-            children: item.children
+            children: item.children,
+            checkable: item.checkable,
+            childOf: item.childOf
         });
         this.refItem = item;
     }
@@ -55,7 +59,7 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent, On
     @Input() initialSelItems: string= '';
     @Input() initialSelText: string= '';
 
-    @Output() selectedChange = new EventEmitter<any[]>();
+    @Output() selectedChange = new EventEmitter<string>();
     headerTemplateContext: TreeviewHeaderTemplateContext;
     allItem: TreeviewItem;
     filterText = '';
@@ -74,16 +78,7 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent, On
         this.createHeaderTemplateContext();
     }
 
-    ngOnInit(){
-        if (this.initialSelItems!==''){
-            let itm: string[]= this.initialSelItems.split(',');
-            let iTx: string[]= this.initialSelText.split(',');
-            for(let i = 0; i< itm.length; i++){
-                this.checkedItm = new TreeviewItem({ text: iTx[i], value: itm[i], checked: true })
-                this.checkedItems.push(this.checkedItm)
-            }
-        }
-    }
+    ngOnInit(){}
 
     get hasFilterItems(): boolean {
         return !_.isNil(this.filterItems) && this.filterItems.length > 0;
@@ -142,7 +137,8 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent, On
         }
         if (expandedItem.hasChildren && _.isNil(expandedItem.children)) {
             expandedItem.children = await this.tvdataSvc.getTree(this.config.url,expandedItem.value,false,this.initialSelItems)
-             this.raiseSelectedChange();
+            if (!expandedItem.checkable) expandedItem.checked = false // I am unclear why adding the collection causes checked to be set true 
+            this.raiseSelectedChange();
          }
     }
     onItemCheckedChange(item: TreeviewItem, checked: boolean) {
@@ -163,6 +159,7 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent, On
         if (item instanceof FilterTreeviewItem) {
             item.updateRefChecked();
         }
+       
 
         
     }
@@ -180,19 +177,22 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent, On
 
             } 
             
-            
-            this.checkedItems =[];
-             if (this.config.singleSelect && this.checkedItm.checked) {
-                 this.checkedItems.push(this.checkedItm)
-             } else{
-                 this.checkedItems = currentlyChecked;
-             }
-                
-            
         }
+        this.checkedItems = currentlyChecked;
+       
 
-        const values = this.eventParser.getSelectedChange(this);
-        this.selectedChange.emit(values);
+        var values = this.eventParser.getSelectedChange(this);
+        //add back in unloaded elements previously selected
+        if(this.tvdataSvc.selV.length==1 && this.tvdataSvc.selV[0].key == '' ){
+            var ids = this.tvdataSvc.selV[0].values
+            if (_.without(this.tvdataSvc.selV[0].used,true).length> 0 ){
+                _.forOwn(this.tvdataSvc.selV[0].used,function(value,key){
+                    if (!value) {values[0].push(ids[key])};
+                })
+            }
+        } 
+
+        this.selectedChange.emit(JSON.stringify(values));
        
     }
 
@@ -285,4 +285,6 @@ export class TreeviewComponent implements OnChanges, TreeviewParserComponent, On
         }
         this.allItem.collapsed = !hasItemExpanded;
     }
+
+    
 }

@@ -1,0 +1,83 @@
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-success" role="alert">
+            Selected item: {{values}}
+
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-lg-4 col-sm-12">
+                <div class="form-group">
+                    <p>
+                        <strong>Configuration</strong>
+                    </p>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" [(ngModel)]="config.hasAllCheckBox"> hasAllCheckBox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" [(ngModel)]="config.hasFilter"> hasFilter
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" [(ngModel)]="config.hasCollapseExpand"> hasCollapseExpand
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" [(ngModel)]="config.singleSelect"> Single Select
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" [(ngModel)]="config.loadAll"> Load all at once
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" [(ngModel)]="config.selectBranch"> Select whole branch
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" [(ngModel)]="config.selectParents"> Select parent
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="treetoload">Tree to Load</label>
+                        <input type="text" class="form-control" id="treetoload" placeholder="maxHeight" [(ngModel)]="config.treeToLoad">
+                    </div>
+                    <div class="form-group">
+                        <label for="url">url</label>
+                        <input type="text" class="form-control" id="url" placeholder="maxHeight" [(ngModel)]="config.url">
+                    </div>
+                    <div class="form-group">
+                        <label for="intitalvalues">Intial values</label>
+                        <input type="text" class="form-control" id="intitalvalues" placeholder="maxHeight" [(ngModel)]="initialSelItems">
+                    </div>
+                    <div class="form-inline">
+                        <label for="maxHeight">maxHeight</label>
+                        <input type="text" class="form-control mx-sm-3" id="maxHeight" placeholder="maxHeight" [(ngModel)]="config.maxHeight">
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-12">
+                <div class="form-group">
+                    <p>
+                        <strong>ngx-dropdown-treeview</strong>
+                    </p>
+                    <ngx-dropdown-treeview [config]="config" [items]="items" [initialSelItems]="initialSelItems" [initialSelText]="initialSelText"
+                        (selectedChange)="values = $event">
+                    </ngx-dropdown-treeview>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

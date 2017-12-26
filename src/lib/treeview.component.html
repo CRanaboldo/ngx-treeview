@@ -3,11 +3,12 @@
         <i *ngIf="item.hasChildren" (click)="onCollapseExpand()" aria-hidden="true" class="fa" [class.fa-caret-right]="item.collapsed"
             [class.fa-caret-down]="!item.collapsed"></i>
         <label class="form-check-label">
-          <div *ngIf="!(config.singleSelect && item.hasChildren)">  
+          
+          <div *ngIf="(!(config.singleSelect && item.hasChildren)) && item.checkable">  
             <input type="checkbox" class="form-check-input"
                 [(ngModel)]="item.checked" (ngModelChange)="onCheckedChange()" [disabled]="item.disabled" />  {{item.text}}
           </div>   
-          <div *ngIf="(config.singleSelect && item.hasChildren)" style="margin-left: -20px;" >  
+          <div *ngIf="((config.singleSelect && item.hasChildren) || !item.checkable)" style="margin-left: -20px;" >  
             {{item.text}}
           </div>                
 
